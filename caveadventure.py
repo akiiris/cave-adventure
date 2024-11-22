@@ -1,3 +1,5 @@
+import os # to clear the terminal
+import sys
 import time
 import keyboard # googled "python keyboard pressed input library"; this way we can detect key presses without the user having to send a whole line in the console and without having to pause the program for their input.
 
@@ -9,6 +11,8 @@ def scene_intro():
     printg(".", 1.0)
     printg(".", 1.0)
     printg(".", 1.0)
+    # TODO: finish intro
+    # not the most important, so for now we'll skip to the part where we're in the entrance of the cave
 
 
 # prints a line gradually, can press ENTER to print instantly
@@ -43,11 +47,43 @@ def flush_input():
         while msvcrt.kbhit(): # returns True if a key press is buffered
             msvcrt.getch() # removes the key press from the input buffer after reading it
     except ImportError: # for Unix
-        import sys, termios
+        import termios
         termios.tcflush(sys.stdin, termios.TCIOFLUSH) # idk how this works and didn't bother looking into it because i don't use linux or macos, but i added it for compatibility
 
 
+def quit():
+    print("Goodbye!")
+    time.sleep(1.0)
+    sys.exit()
+
+
+# clears the terminal
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear') # first case is for windows, else is for unix
+
+
+def main_menu():
+    print("Welcome to Cave Adventure!")
+    print("1. New Game")
+    print("2. Load Save")
+    print("3. Quit")
+    choice = input("> ")
+    match choice:
+        case "1":
+            pass
+        case "2":
+            pass
+        case "3":
+            quit()
+        case _:
+            print("Input is invalid. Please enter an integer (1-3).")
+            time.sleep(1.5)
+            clear_screen()
+            main_menu()
+
+
 def main():
+    main_menu()
     scene_intro()
 
 
