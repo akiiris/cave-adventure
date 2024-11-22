@@ -12,9 +12,17 @@ class Location(Enum): # learned about how enums work in Python through the docs
     ENTRANCE = auto()
 
 
-# process player input for game actions
-def process_command():
-    pass
+# interpret player's command for game actions
+def interpret_command(command, loc):
+    command_array = process_command(command)
+    print(command_array)
+    return False, loc
+
+
+# process a command into an array with each piece of syntax (in order) at a subsequent index
+def process_command(command):
+    command_array = command.split()
+    return command_array
 
 
 # the ingame menu where you can input actions
@@ -22,7 +30,7 @@ def game_menu(loc):
     look(loc)
     while True:
         command = input("> ")
-        moved, new_loc = process_command(player_input, loc): # returning True means the location has changed
+        moved, new_loc = interpret_command(command, loc) # returning True means the location has changed
         if moved:
             game_menu(new_loc) # if the location has changed, we'll call game_menu and pass in the new location
             return # putting this return here probably makes everything safer, idk
@@ -100,8 +108,8 @@ def quit():
     sys.exit()
 
 
-# clears the terminal
-def clear_screen():
+# clears the terminal (duh)
+def terminal_screen():
     os.system('cls' if os.name == 'nt' else 'clear') # first case is for windows, else is for unix
     flush_input() # flush the input buffer so dumb shit doesn't happen (this is becoming a really useful method)
 
@@ -122,7 +130,7 @@ def main_menu():
         case _:
             print("Input is invalid. Please enter an integer (1-3).")
             time.sleep(1.5)
-            clear_screen()
+            clear_terminal()
             main_menu()
 
 
