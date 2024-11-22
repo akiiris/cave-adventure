@@ -81,20 +81,21 @@ def quit():
 # clears the terminal
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear') # first case is for windows, else is for unix
+    flush_input() # flush the input buffer so dumb shit doesn't happen (this is becoming a really useful method)
 
 
 def main_menu():
     print("Welcome to Cave Adventure!")
     print("1. New Game")
-    print("2. Load Save")
+    print("2. Load Game")
     print("3. Quit")
     choice = input("> ")
-    match choice:
-        case "1":
+    match choice.lower():
+        case "1" | "new game":
             new_game()
-        case "2":
+        case "2" | "load game":
             load_game() # TODO: implement save loading
-        case "3":
+        case "3" | "quit":
             quit()
         case _:
             print("Input is invalid. Please enter an integer (1-3).")
@@ -104,7 +105,7 @@ def main_menu():
 
 
 def main():
-    intro()
+    #intro()
     main_menu()
 
 
