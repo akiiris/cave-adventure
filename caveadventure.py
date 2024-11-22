@@ -15,7 +15,7 @@ def game_menu(loc):
 
 
 # play the intro scene when a new game is started
-def scene_intro():
+def intro():
     printg("You step outside your house, greeted by the crisp chill of the evening air.")
     printg(" The sun dips below the horizon, painting the sky in hues of orange and purple.", 0.2)
     printg(" The world feels still, save for the occasional rustle of leaves in the distance.", 0.2, True)
@@ -28,7 +28,6 @@ def scene_intro():
 
 # starts a new game
 def new_game():
-    scene_intro()
     game_menu(Location['ENTRANCE'])
 
 
@@ -105,6 +104,7 @@ def main_menu():
 
 
 def main():
+    intro()
     main_menu()
 
 
