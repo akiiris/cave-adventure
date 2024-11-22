@@ -1,3 +1,6 @@
+# writing this program within a single document hurt my brain. idk how the notepad++ guy does it.
+# i'm pretty familiar with scripting languages through my experience doing game dev. anything that could possibly be misconstrued as written by AI i've given an explanation for; the Python docs have been very helpful.
+
 import os # to clear the terminal
 import sys
 import time
@@ -9,9 +12,28 @@ class Location(Enum): # learned about how enums work in Python through the docs
     ENTRANCE = auto()
 
 
+# process player input for game actions
+def process_command():
+    pass
+
+
 # the ingame menu where you can input actions
 def game_menu(loc):
-    pass
+    look(loc)
+    while True:
+        command = input("> ")
+        moved, new_loc = process_command(player_input, loc): # returning True means the location has changed
+        if moved:
+            game_menu(new_loc) # if the location has changed, we'll call game_menu and pass in the new location
+            return # putting this return here probably makes everything safer, idk
+
+
+def look(loc):
+    match loc:
+        case Location.ENTRANCE:
+            printg("You stand before the mouth of the cave, a jagged opening carved into the side of a weathered hillside.")
+            printg(" The air is noticeably cooler here, carrying a faint, musty scent of earth and stone.", 0.2)
+            printg(" A soft breeze escapes the darkness within, brushing against your skin and sending a faint shiver down your spine.", 0.2, True)
 
 
 # play the intro scene when a new game is started
@@ -28,10 +50,10 @@ def intro():
 
 # starts a new game
 def new_game():
-    game_menu(Location['ENTRANCE'])
+    game_menu(Location.ENTRANCE)
 
 
-# load and interprets a save
+# load and interpret a save
 def load_game():
     pass
 
@@ -48,7 +70,7 @@ def printg(string, prewait = 0.0, newline = False, delta = 0.020): # interpret "
             flush_input() # flush the input buffer so the ENTER key press isn't processed multiple times
             print(string[pos:], end = "") # "string slicing" (from geeksforgeeks.org); colon indicates to removes all chars before the specified index; print the remainder of the string
             if newline:
-                print() # add a \n
+                print()
             return
         time.sleep(delta) # sleeps for delta seconds
     if newline:
