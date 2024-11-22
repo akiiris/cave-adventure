@@ -2,8 +2,19 @@ import os # to clear the terminal
 import sys
 import time
 import keyboard # googled "python keyboard pressed input library"; this way we can detect key presses without the user having to send a whole line in the console and without having to pause the program for their input.
+from enum import Enum, auto
+
+# An enum for all location names
+class Location(Enum): # learned about how enums work in Python through the docs
+    ENTRANCE = auto()
 
 
+# the ingame menu where you can input actions
+def game_menu(loc):
+    pass
+
+
+# play the intro scene when a new game is started
 def scene_intro():
     printg("You step outside your house, greeted by the crisp chill of the evening air.")
     printg(" The sun dips below the horizon, painting the sky in hues of orange and purple.", 0.2)
@@ -12,7 +23,18 @@ def scene_intro():
     printg(".", 1.0)
     printg(".", 1.0)
     # TODO: finish intro
-    # not the most important, so for now we'll skip to the part where we're in the entrance of the cave
+    # ----- not the most important, so for now we'll skip to the part where we're in the entrance of the cave
+
+
+# starts a new game
+def new_game():
+    scene_intro()
+    game_menu(Location['ENTRANCE'])
+
+
+# load and interprets a save
+def load_game():
+    pass
 
 
 # prints a line gradually, can press ENTER to print instantly
@@ -70,9 +92,9 @@ def main_menu():
     choice = input("> ")
     match choice:
         case "1":
-            pass
+            new_game()
         case "2":
-            pass
+            load_game() # TODO: implement save loading
         case "3":
             quit()
         case _:
@@ -84,7 +106,6 @@ def main_menu():
 
 def main():
     main_menu()
-    scene_intro()
 
 
 if __name__ == "__main__":
