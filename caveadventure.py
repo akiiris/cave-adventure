@@ -14,14 +14,27 @@ class Location(Enum): # learned about how enums work in Python through the docs
 
 # interpret player's command for game actions
 def interpret_command(command, loc):
+    flush_input()
     command_array = process_command(command)
-    print(command_array)
+    if len(command_array) > 0:
+        match command_array[0].lower():
+            case "help":
+                display_help()
+                return False, loc
+            case "look":
+                time.sleep(0.5)
+                flush_input()
+                look(loc)
+                return False, loc
+    else:
+        return False, loc
+    print("Unknown command. Type \"help\" for a list of valid commands.")
     return False, loc
 
 
 # process a command into an array with each piece of syntax (in order) at a subsequent index
 def process_command(command):
-    command_array = command.split()
+    command_array = command.split() # splits the string using " " as the separator, adding each word to a subsequent index in the array
     return command_array
 
 
@@ -30,10 +43,20 @@ def game_menu(loc):
     look(loc)
     while True:
         command = input("> ")
+        print()
         moved, new_loc = interpret_command(command, loc) # returning True means the location has changed
         if moved:
             game_menu(new_loc) # if the location has changed, we'll call game_menu and pass in the new location
             return # putting this return here probably makes everything safer, idk
+
+
+def display_help():
+    print("Available commands:")
+    print("HELP")
+    print("- Shows a list available commands.")
+    print()
+    print("LOOK")
+    print("- Looks at your surroundings.")
 
 
 def look(loc):
