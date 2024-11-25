@@ -8,7 +8,7 @@ import keyboard # googled "python keyboard pressed input library"; this way we c
 import location # i wrote this; # handles the Location class and builder
 
 # information dictionaries
-items_dict = None
+value_dict = None # maps items to their value
 
 # player data variables
 current_location = None
@@ -64,15 +64,21 @@ def interpret_command(command, loc_name):
                 display_help()
                 return False, loc_name
             case "inventory":
+                if len(command_array) == 1:
+                    display_inventory()
+                    return False, loc_name
                 match command_array[1]:
                     case "min":
-                        min_max_inventory()
+                        min_max_inventory(True)
                         return False, loc_name
                     case "max":
-                        min_max_inventory(True)
+                        min_max_inventory()
                         return False, loc_name
                     case "sum":
                         sum_inventory()
+                        return False, loc_name
+                    case _:
+                        display_inventory()
                         return False, loc_name
                 display_inventory()
                 return False, loc_name
@@ -122,10 +128,10 @@ def display_help():
     print("INVENTORY")
     print("- Displays your inventory.")
     print()
-    print("INVENTORY MIN/MAX") # TODO
+    print("INVENTORY MIN/MAX")
     print("- Tells you the highest/lowest valued item in your inventory.")
     print()
-    print("INVENTORY SUM") # TODO
+    print("INVENTORY SUM")
     print("- Sums the values of every item in your inventory.")
     print()
     print("LOOK")
@@ -139,9 +145,12 @@ def display_help():
 def display_inventory():
     global inventory
     print("Inventory:")
-    for item in inventory:
-        itemc = item.capitalize()
-        print(f"{itemc}")
+    if len(inventory) == 0:
+        print("Empty")
+    else:
+        for item in inventory:
+            itemc = item.capitalize()
+            print(f"{itemc}")
         
 
 
@@ -149,21 +158,48 @@ def display_inventory():
 def sort_inventory():
     global inventory
     inventory.sort()
-    
 
 
 # find the minimum or maximum value item in the inventory
-def min_max_inventory(minimum = False): # TODO
-    pass
+def min_max_inventory(minimum = False):
+    global inventory
+    global value_dict
+    if len(inventory) == 0:
+        printg("Your inventory is empty.")
+    elif minimum:
+        first_go_through = True
+        min_value_item = None
+        for item in inventory:
+            if first_go_through:
+                min_value_item = item
+                first_go_through = False
+            else:
+                min_value = min(value_dict[item], value_dict[min_value_item])
+                if value_dict[item] == min_value:
+                    min_value_item = item
+        print(f"Your lowest-valued item is a {min_value_item} at a value of {value_dict[min_value_item]}")
+        
+    else:
+        first_go_through = True
+        max_value_item = None
+        for item in inventory:
+            if first_go_through:
+                max_value_item = item
+                first_go__through = False
+            else:
+                max_value = max(value_dict[item], value_dict[max_value_item])
+                if value_dict[item] == max_value:
+                    max_value_item = item
+        print(f"Your highest-valued item is a {max_value_item} at a value of {value_dict[max_value_item]}")
 
 
 # sum the values of all items in the inventory and display the sum
-def sum_inventory(): # TODO
+def sum_inventory():
     global inventory
-    global items_dict
+    global value_dict
     vsum = 0
     for item in inventory:
-        for ref, value in items_dict.items():
+        for ref, value in value_dict.items():
             if item == ref:
                 vsum += value
     print(f"The total value of your inventory is {vsum}.")
@@ -281,10 +317,10 @@ def main_menu():
 
 # set up and parse all starting game data
 def set_up_data():
-    global items_dict
+    global value_dict
     
     initialize_locations()
-    items_dict = parse_items()
+    value_dict = parse_items()
 
 
 # set up and build all locations in their initial states
@@ -389,11 +425,11 @@ def parse_items():
     items_lines = []
     with open("items.txt") as file: # open file in read mode
         items_lines = file.readlines() # list where each line in the file is an item
-    items_dict = {}
+    value_dict = {}
     for line in items_lines:
         item, value = line.strip().split(",")
-        items_dict[item] = int(value)
-    return items_dict
+        value_dict[item] = int(value)
+    return value_dict
 
 
 def main():
