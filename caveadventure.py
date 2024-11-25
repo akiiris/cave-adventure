@@ -31,39 +31,6 @@ loc_sunken_chamber = None
 
 
 
-# interpret player's command for game actions
-def interpret_command(command, loc_name):
-    global locations
-    flush_input()
-    command_array = process_command(command)
-    time.sleep(0.5)
-    if len(command_array) > 0:
-        match command_array[0].lower():
-            case "help":
-                display_help()
-                return False, loc_name
-            case "look":
-                flush_input()
-                look(locations[loc_name])
-                return False, loc_name
-            case "goto":
-                if len(command_array) == 2:
-                    return goto(locations[loc_name], command_array[1])
-                else:
-                    print("Invalid usage. Please use 'GOTO <location>' where <location> uses underscores instead of spaces.")
-                    return False, loc_name
-    else:
-        return False, loc_name
-    print("Unknown command. Type \"help\" for a list of available commands.")
-    return False, loc_name
-
-
-# process a command into an array with each piece of syntax (in order) at a subsequent index
-def process_command(command):
-    command_array = command.split() # splits the string using " " as the separator, adding each word to a subsequent index in the array
-    return command_array
-
-
 # the ingame menu where you can input actions
 def game_menu(loc_name):
     global locations
@@ -77,6 +44,39 @@ def game_menu(loc_name):
             current_location = new_loc_name
             game_menu(new_loc_name) # if the location has changed, we'll call game_menu and pass in the new location
             return # putting this return here probably makes everything safer, idk; we're just getting deeper into this chain with each game_menu() call
+
+
+# interpret player's command for game actions
+def interpret_command(command, loc_name):
+    global locations
+    flush_input()
+    command_array = process_command(command)
+    time.sleep(0.5)
+    if len(command_array) > 0:
+        match command_array[0].lower():
+            case "goto":
+                if len(command_array) == 2:
+                    return goto(locations[loc_name], command_array[1])
+                else:
+                    print("Invalid usage. Please use 'GOTO <location>' where <location> uses underscores instead of spaces.")
+                    return False, loc_name
+            case "help":
+                display_help()
+                return False, loc_name
+            case "look":
+                flush_input()
+                look(locations[loc_name])
+                return False, loc_name
+    else:
+        return False, loc_name
+    print("Unknown command. Type \"help\" for a list of available commands.")
+    return False, loc_name
+
+
+# process a command into an array with each piece of syntax (in order) at a subsequent index
+def process_command(command):
+    command_array = command.split() # splits the string using " " as the separator, adding each word to a subsequent index in the array
+    return command_array
 
 
 # display the inventory and select an item to check the value of
