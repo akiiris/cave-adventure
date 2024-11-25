@@ -64,6 +64,16 @@ def interpret_command(command, loc_name):
                 display_help()
                 return False, loc_name
             case "inventory":
+                match command_array[1]:
+                    case "min":
+                        min_max_inventory()
+                        return False, loc_name
+                    case "max":
+                        min_max_inventory(True)
+                        return False, loc_name
+                    case "sum":
+                        sum_inventory()
+                        return False, loc_name
                 display_inventory()
                 return False, loc_name
             case "look":
@@ -109,10 +119,10 @@ def display_help():
     print("HELP")
     print("- Shows a list available commands.")
     print()
-    print("INVENTORY") # TODO
+    print("INVENTORY")
     print("- Displays your inventory.")
     print()
-    print("INVENTORY MAX/MIN") # TODO
+    print("INVENTORY MIN/MAX") # TODO
     print("- Tells you the highest/lowest valued item in your inventory.")
     print()
     print("INVENTORY SUM") # TODO
@@ -121,7 +131,7 @@ def display_help():
     print("LOOK")
     print("- Looks at your surroundings.")
     print()
-    print("PICKUP <item>") # TODO
+    print("PICKUP <item>")
     print("Picks up an item in range.")
 
 
@@ -147,9 +157,18 @@ def min_max_inventory(minimum = False): # TODO
     pass
 
 
-# sum the values of all items in the inventory
+# sum the values of all items in the inventory and display the sum
 def sum_inventory(): # TODO
-    pass
+    global inventory
+    global items_dict
+    vsum = 0
+    for item in inventory:
+        for ref, value in items_dict.items():
+            if item == ref:
+                vsum += value
+    print(f"The total value of your inventory is {vsum}.")
+        
+    
 
 
 def look(loc):
