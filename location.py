@@ -5,6 +5,7 @@ class Location: # learned Python class syntax from the docs
     def __init__(self):
         self.name = ""
         self.desc = ""
+        self.items = []
         self.can_go_array = []
 
 
@@ -21,6 +22,10 @@ class LocationBuilder:
 
     def set_desc(self, desc):
         self.location.desc = desc
+
+
+    def set_items(self, items):
+        self.location.items = items
 
 
     def set_can_go(self, can_go_array):

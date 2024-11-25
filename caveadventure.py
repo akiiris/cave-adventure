@@ -7,14 +7,17 @@ import time
 import keyboard # googled "python keyboard pressed input library"; this way we can detect key presses without the user having to send a whole line in the console and without having to pause the program for their input.
 import location # i wrote this; # handles the Location class and builder
 
-# player data
+# information dictionaries
+items_dict = None
+
+# player data variables
 current_location = None
 inventory = None
 
-# location global variables
+# location variables (objects)
 # after calling initialize_locations() at program start, they will each contain a unique location object
 # i'm not sure if you have to declare global variables before you set them in Python, but i am just to be safe
-locations = None
+locations = None # maps location names to Location objects (see initialize_locations())
 loc_entrance = None
 loc_main_tunnel = None
 loc_forked_path = None
@@ -205,6 +208,14 @@ def main_menu():
                 clear_terminal()
 
 
+# set up and parse all starting game data
+def set_up_data():
+    global items_dict
+    
+    initialize_locations()
+    items_dict = parse_items()
+
+
 # set up and build all locations in their initial states
 def initialize_locations():
     global locations
@@ -222,60 +233,70 @@ def initialize_locations():
     builder_entrance = location.LocationBuilder()
     builder_entrance.set_name("entrance")
     builder_entrance.set_desc("You stand before the mouth of the cave, a jagged opening carved into the side of a weathered hillside. The air is noticeably cooler here, carrying a faint, musty scent of earth and stone. A soft breeze escapes the darkness within, brushing against your skin and sending a faint shiver down your spine.")
+    builder_entrance.set_items([])
     builder_entrance.set_can_go(["main_tunnel"])
     loc_entrance = builder_entrance.build()
     
     builder_main_tunnel = location.LocationBuilder()
     builder_main_tunnel.set_name("main_tunnel")
     builder_main_tunnel.set_desc("you're in the main tunnel") # TODO
+    builder_main_tunnel.set_items(["rock", "stick"])
     builder_main_tunnel.set_can_go(["forked_path"])
     loc_main_tunnel = builder_main_tunnel.build()
 
     builder_forked_path = location.LocationBuilder()
     builder_forked_path.set_name("forked_path")
     builder_forked_path.set_desc("you're at the forked path") # TODO
+    builder_forked_path.set_items(["rock"])
     builder_forked_path.set_can_go(["main_tunnel", "crystal_cavern", "underground_stream"])
     loc_forked_path = builder_forked_path.build()
     
     builder_crystal_cavern = location.LocationBuilder()
     builder_crystal_cavern.set_name("crystal_cavern")
     builder_crystal_cavern.set_desc("you're in the crystal cavern") # TODO
+    builder_crystal_cavern.set_items(["shiny gem"])
     builder_crystal_cavern.set_can_go(["forked_path", "hidden_passage"])
     loc_crystal_cavern = builder_crystal_cavern.build()
     
     builder_hidden_passage = location.LocationBuilder()
     builder_hidden_passage.set_name("hidden_passage")
     builder_hidden_passage.set_desc("you're in the hidden passage") # TODO
+    builder_hidden_passage.set_items([])
     builder_hidden_passage.set_can_go(["crystal_cavern", "ancient_shrine"])
     loc_hidden_passage = builder_hidden_passage.build()
     
     builder_ancient_shrine = location.LocationBuilder()
     builder_ancient_shrine.set_name("ancient_shrine")
     builder_ancient_shrine.set_desc("you're at the ancient shrine") # TODO
+    builder_ancient_shrine.set_items([])
     builder_ancient_shrine.set_can_go(["hidden_passage"])
     loc_ancient_shrine = builder_ancient_shrine.build()
     
     builder_underground_stream = location.LocationBuilder()
     builder_underground_stream.set_name("underground_stream")
     builder_underground_stream.set_desc("you're at the underground stream") # TODO
+    builder_underground_stream.set_items(["fish"])
     builder_underground_stream.set_can_go(["forked_path", "cavern_pool", "submerged_tunnel"])
     loc_underground_stream = builder_underground_stream.build()
     
     builder_cavern_pool = location.LocationBuilder()
     builder_cavern_pool.set_name("cavern_pool")
     builder_cavern_pool.set_desc("you're at the cavern pool") # TODO
+    builder_cavern_pool.set_items(["stick"])
     builder_cavern_pool.set_can_go(["underground_stream"])
     loc_cavern_pool = builder_cavern_pool.build()
     
     builder_submerged_tunnel = location.LocationBuilder()
     builder_submerged_tunnel.set_name("submerged_tunnel")
     builder_submerged_tunnel.set_desc("you're in the submerged tunnel") # TODO
+    builder_submerged_tunnel.set_items(["rusted dagger"])
     builder_submerged_tunnel.set_can_go(["underground_stream", "sunken_chamber"])
     loc_submerged_tunnel = builder_submerged_tunnel.build()
     
     builder_sunken_chamber = location.LocationBuilder()
     builder_sunken_chamber.set_name("sunken_chamber")
-    builder_sunken_chamber.set_desc("you're in the submerged chamber") # TODO
+    builder_sunken_chamber.set_desc("you're in the sunken chamber") # TODO
+    builder_sunken_chamber.set_items(["gold coin", "cut ruby"])
     builder_sunken_chamber.set_can_go(["submerged_tunnel"])
     loc_sunken_chamber = builder_sunken_chamber.build()
 
@@ -292,9 +313,21 @@ def initialize_locations():
              "sunken_chamber": loc_sunken_chamber}
 
 
+# parse items.txt into a dictionary mapping item names to value
+def parse_items():
+    items_lines = []
+    with open("items.txt") as file: # open file in read mode
+        items_lines = file.readlines() # list where each line in the file is an item
+    items_dict = {}
+    for line in items_lines:
+        item, value = line.strip().split(",")
+        items_dict[item] = int(value)
+    return items_dict
+
+
 def main():
     #intro()
-    initialize_locations()
+    set_up_data()
     main_menu()
 
 

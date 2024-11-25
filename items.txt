@@ -1,0 +1,7 @@
+cut ruby,120
+fish,7
+gold coin,75
+rock,1
+rusted dagger,8
+shiny gem,150
+stick,2
