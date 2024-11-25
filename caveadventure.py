@@ -87,7 +87,7 @@ def interpret_command(command, loc_name):
                 look(loc)
                 return False, loc_name
             case "pickup":
-                pickup(loc, command_array[1])
+                pickup(loc, command_array)
                 return False, loc_name
     else:
         return False, loc_name
@@ -149,7 +149,7 @@ def display_inventory():
         print("Empty")
     else:
         for item in inventory:
-            itemc = item.capitalize()
+            itemc = item.capitalize() # capitalize each item
             print(f"{itemc}")
         
 
@@ -157,7 +157,7 @@ def display_inventory():
 # sort the inventory; called any time the inventory is changed
 def sort_inventory():
     global inventory
-    inventory.sort()
+    inventory.sort() # sort the inventory in alphabetical order
 
 
 # find the minimum or maximum value item in the inventory
@@ -203,8 +203,6 @@ def sum_inventory():
             if item == ref:
                 vsum += value
     print(f"The total value of your inventory is {vsum}.")
-        
-    
 
 
 def look(loc):
@@ -212,8 +210,17 @@ def look(loc):
 
 
 # pick up an item and add it to the inventory
-def pickup(loc, item_name): # TODO
+def pickup(loc, command_array): # TODO
     global inventory
+    item_name = ""
+    first_go_through = True
+    for word in command_array:
+        if first_go_through:
+            first_go_through = False
+        else:
+            item_name += word + " "
+    item_name = item_name.strip()
+    print(item_name)
     found = False
     for item in loc.items:
         if item == item_name:
