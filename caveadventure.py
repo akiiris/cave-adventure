@@ -56,6 +56,9 @@ def interpret_command(command, loc_name):
     time.sleep(0.5)
     if len(command_array) > 0:
         match command_array[0].lower():
+            case "checkvalue":
+                check_value()
+                return False, loc_name
             case "goto":
                 if len(command_array) == 2:
                     return goto(loc, command_array[1])
@@ -104,8 +107,25 @@ def process_command(command):
 
 
 # display the inventory and select an item to check the value of
-def check_value(): # TODO
-    pass
+def check_value():
+    try:
+        global inventory
+        global value_dict
+        print("Select an item by integer:")
+        index = 0
+        for item in inventory:
+            print(f"{index + 1}. {item}")
+            index += 1
+        choice = int(input("Which item would you like to check the value of? ")) - 1
+        if choice < len(inventory):
+            selected_item = inventory[choice]
+            print(f"The value of a {selected_item} is {value_dict[selected_item]}")
+            display_popup(f"The value of a {selected_item} is {value_dict[selected_item]}", "cool")
+        else:
+            print("Selection must be an integer listed above.")
+    except ValueError:
+        print("Selection must be a valid integer.")
+        
 
 
 def goto(loc, new_loc_name):
@@ -118,7 +138,7 @@ def goto(loc, new_loc_name):
 
 def display_help():
     print("Available commands:")
-    print("CHECKVALUE") # TODO
+    print("CHECKVALUE")
     print("Checks the value of an item in your inventory.")
     print()
     print("GOTO <location>")
@@ -153,7 +173,6 @@ def display_inventory():
         for item in inventory:
             itemc = item.capitalize() # capitalize each item
             print(f"{itemc}")
-        
 
 
 # sort the inventory; called any time the inventory is changed
