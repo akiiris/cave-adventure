@@ -7,6 +7,10 @@ import time
 import keyboard # googled "python keyboard pressed input library"; this way we can detect key presses without the user having to send a whole line in the console and without having to pause the program for their input.
 import location # i wrote this; # handles the Location class and builder
 
+# player data
+current_location = None
+inventory = None
+
 # location global variables
 # after calling initialize_locations() at program start, they will each contain a unique location object
 # i'm not sure if you have to declare global variables before you set them in Python, but i am just to be safe
@@ -60,26 +64,43 @@ def process_command(command):
 # the ingame menu where you can input actions
 def game_menu(loc_name):
     global locations
+    global current_location
     look(locations[loc_name])
     while True:
         command = input("> ")
         print()
         moved, new_loc_name = interpret_command(command, loc_name) # returning True means the location has changed
         if moved:
+            current_location = new_loc_name
             game_menu(new_loc_name) # if the location has changed, we'll call game_menu and pass in the new location
             return # putting this return here probably makes everything safer, idk; we're just getting deeper into this chain with each game_menu() call
 
 
 def display_help():
     print("Available commands:")
+    print("CHECKVALUE")
+    print("Checks the value of an item in your inventory.")
+    print()
+    print("GOTO <location>")
+    print("- Goes to a location in range. (Use \"_\" instead of \" \" in location names)")
+    print()
     print("HELP")
     print("- Shows a list available commands.")
+    print()
+    print("INVENTORY")
+    print("- Displays your inventory.")
+    print()
+    print("INVENTORY MAX/MIN")
+    print("- Tells you the highest/lowest valued item in your inventory.")
+    print()
+    print("INVENTORY SUM")
+    print("- Sums the values of every item in your inventory.")
     print()
     print("LOOK")
     print("- Looks at your surroundings.")
     print()
-    print("GOTO <location>")
-    print("- Goes to a location in range. (Use \"_\" instead of \" \" in location names)")
+    print("PICKUP <item>")
+    print("Picks up an item in range.")
 
 
 def look(loc):
@@ -107,6 +128,8 @@ def intro():
 
 # starts a new game
 def new_game():
+    global current_location
+    current_location = "entrance"
     game_menu("entrance")
 
 
