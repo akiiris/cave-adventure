@@ -107,7 +107,7 @@ def check_value(): # TODO
 
 
 def goto(loc, new_loc_name):
-    for location in loc.can_go_array:
+    for location in loc.can_go:
         if location == new_loc_name:
             return True, new_loc_name
     print("Destination is invalid or you can't go there. Please use \"_\" instead of \" \" in destination name.")
@@ -207,6 +207,10 @@ def sum_inventory():
 
 def look(loc):
     printg(loc.desc)
+    for item in loc.items:
+        printg(f"There is a {item} here.")
+    for location in loc.can_go:
+        printg(f"There is a path leading to the {location}.")
 
 
 # pick up an item and add it to the inventory
@@ -353,63 +357,63 @@ def initialize_locations():
     
     builder_main_tunnel = location.LocationBuilder()
     builder_main_tunnel.set_name("main_tunnel")
-    builder_main_tunnel.set_desc("you're in the main tunnel") # TODO
+    builder_main_tunnel.set_desc("You're in the main tunnel.") # TODO
     builder_main_tunnel.set_items(["rock", "stick"])
     builder_main_tunnel.set_can_go(["forked_path"])
     loc_main_tunnel = builder_main_tunnel.build()
 
     builder_forked_path = location.LocationBuilder()
     builder_forked_path.set_name("forked_path")
-    builder_forked_path.set_desc("you're at the forked path") # TODO
+    builder_forked_path.set_desc("You're at the forked path.") # TODO
     builder_forked_path.set_items(["rock"])
     builder_forked_path.set_can_go(["main_tunnel", "crystal_cavern", "underground_stream"])
     loc_forked_path = builder_forked_path.build()
     
     builder_crystal_cavern = location.LocationBuilder()
     builder_crystal_cavern.set_name("crystal_cavern")
-    builder_crystal_cavern.set_desc("you're in the crystal cavern") # TODO
+    builder_crystal_cavern.set_desc("You're in the crystal cavern.") # TODO
     builder_crystal_cavern.set_items(["shiny gem"])
     builder_crystal_cavern.set_can_go(["forked_path", "hidden_passage"])
     loc_crystal_cavern = builder_crystal_cavern.build()
     
     builder_hidden_passage = location.LocationBuilder()
     builder_hidden_passage.set_name("hidden_passage")
-    builder_hidden_passage.set_desc("you're in the hidden passage") # TODO
+    builder_hidden_passage.set_desc("You're in the hidden passage.") # TODO
     builder_hidden_passage.set_items([])
     builder_hidden_passage.set_can_go(["crystal_cavern", "ancient_shrine"])
     loc_hidden_passage = builder_hidden_passage.build()
     
     builder_ancient_shrine = location.LocationBuilder()
     builder_ancient_shrine.set_name("ancient_shrine")
-    builder_ancient_shrine.set_desc("you're at the ancient shrine") # TODO
+    builder_ancient_shrine.set_desc("You're at the ancient shrine.") # TODO
     builder_ancient_shrine.set_items([])
     builder_ancient_shrine.set_can_go(["hidden_passage"])
     loc_ancient_shrine = builder_ancient_shrine.build()
     
     builder_underground_stream = location.LocationBuilder()
     builder_underground_stream.set_name("underground_stream")
-    builder_underground_stream.set_desc("you're at the underground stream") # TODO
+    builder_underground_stream.set_desc("You're at the underground stream.") # TODO
     builder_underground_stream.set_items(["fish"])
     builder_underground_stream.set_can_go(["forked_path", "cavern_pool", "submerged_tunnel"])
     loc_underground_stream = builder_underground_stream.build()
     
     builder_cavern_pool = location.LocationBuilder()
     builder_cavern_pool.set_name("cavern_pool")
-    builder_cavern_pool.set_desc("you're at the cavern pool") # TODO
+    builder_cavern_pool.set_desc("You're at the cavern pool.") # TODO
     builder_cavern_pool.set_items(["stick"])
     builder_cavern_pool.set_can_go(["underground_stream"])
     loc_cavern_pool = builder_cavern_pool.build()
     
     builder_submerged_tunnel = location.LocationBuilder()
     builder_submerged_tunnel.set_name("submerged_tunnel")
-    builder_submerged_tunnel.set_desc("you're in the submerged tunnel") # TODO
+    builder_submerged_tunnel.set_desc("You're in the submerged tunnel.") # TODO
     builder_submerged_tunnel.set_items(["rusted dagger"])
     builder_submerged_tunnel.set_can_go(["underground_stream", "sunken_chamber"])
     loc_submerged_tunnel = builder_submerged_tunnel.build()
     
     builder_sunken_chamber = location.LocationBuilder()
     builder_sunken_chamber.set_name("sunken_chamber")
-    builder_sunken_chamber.set_desc("you're in the sunken chamber") # TODO
+    builder_sunken_chamber.set_desc("You're in the sunken chamber.") # TODO
     builder_sunken_chamber.set_items(["gold coin", "cut ruby"])
     builder_sunken_chamber.set_can_go(["submerged_tunnel"])
     loc_sunken_chamber = builder_sunken_chamber.build()
