@@ -63,6 +63,9 @@ def interpret_command(command, loc_name):
             case "help":
                 display_help()
                 return False, loc_name
+            case "inventory":
+                display_inventory()
+                return False, loc_name
             case "look":
                 flush_input()
                 look(loc)
@@ -123,8 +126,13 @@ def display_help():
 
 
 # display the inventory
-def display_inventory(): # TODO
-    pass
+def display_inventory():
+    global inventory
+    print("Inventory:")
+    for item in inventory:
+        itemc = item.capitalize()
+        print(f"{itemc}")
+        
 
 
 # sort the inventory; called before any time the inventory is displayed
@@ -149,13 +157,15 @@ def look(loc):
 # pick up an item and add it to the inventory
 def pickup(loc, item_name): # TODO
     global inventory
+    found = False
     for item in loc.items:
-        print(item)
         if item == item_name:
+            found = True
             loc.items.remove(item)
             inventory.append(item)
             print(f"You picked up a {item}!")
-    print("There is no item within range with that name.")
+    if not found:
+        print("There is no item within range with that name.")
 
 
 # play the intro scene when a new game is started
