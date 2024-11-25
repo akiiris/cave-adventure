@@ -12,7 +12,7 @@ items_dict = None
 
 # player data variables
 current_location = None
-inventory = None
+inventory = []
 
 # location variables (objects)
 # after calling initialize_locations() at program start, they will each contain a unique location object
@@ -38,7 +38,6 @@ def game_menu(loc_name):
     look(locations[loc_name])
     while True:
         command = input("> ")
-        print()
         moved, new_loc_name = interpret_command(command, loc_name) # returning True means the location has changed
         if moved:
             current_location = new_loc_name
@@ -49,6 +48,7 @@ def game_menu(loc_name):
 # interpret player's command for game actions
 def interpret_command(command, loc_name):
     global locations
+    loc = locations[loc_name]
     flush_input()
     command_array = process_command(command)
     time.sleep(0.5)
@@ -56,7 +56,7 @@ def interpret_command(command, loc_name):
         match command_array[0].lower():
             case "goto":
                 if len(command_array) == 2:
-                    return goto(locations[loc_name], command_array[1])
+                    return goto(loc, command_array[1])
                 else:
                     print("Invalid usage. Please use 'GOTO <location>' where <location> uses underscores instead of spaces.")
                     return False, loc_name
@@ -65,7 +65,10 @@ def interpret_command(command, loc_name):
                 return False, loc_name
             case "look":
                 flush_input()
-                look(locations[loc_name])
+                look(loc)
+                return False, loc_name
+            case "pickup":
+                pickup(loc, command_array[1])
                 return False, loc_name
     else:
         return False, loc_name
@@ -86,7 +89,6 @@ def check_value(): # TODO
 
 def goto(loc, new_loc_name):
     for location in loc.can_go_array:
-        print(location)
         if location == new_loc_name:
             return True, new_loc_name
     print("Destination is invalid or you can't go there. Please use \"_\" instead of \" \" in destination name.")
@@ -125,13 +127,18 @@ def display_inventory(): # TODO
     pass
 
 
+# sort the inventory; called before any time the inventory is displayed
+def sort_inventory():
+    pass
+
+
 # find the minimum or maximum value item in the inventory
 def min_max_inventory(minimum = False): # TODO
     pass
 
 
 # sum the values of all items in the inventory
-sum_inventory(): # TODO
+def sum_inventory(): # TODO
     pass
 
 
@@ -140,8 +147,15 @@ def look(loc):
 
 
 # pick up an item and add it to the inventory
-def pickup(loc, item): # TODO
-    pass
+def pickup(loc, item_name): # TODO
+    global inventory
+    for item in loc.items:
+        print(item)
+        if item == item_name:
+            loc.items.remove(item)
+            inventory.append(item)
+            print(f"You picked up a {item}!")
+    print("There is no item within range with that name.")
 
 
 # play the intro scene when a new game is started
