@@ -4,6 +4,8 @@
 import os # to clear the terminal
 import sys
 import time
+from tkinter import *
+from tkinter import ttk
 import keyboard # googled "python keyboard pressed input library"; this way we can detect key presses without the user having to send a whole line in the console and without having to pause the program for their input.
 import location # i wrote this; # handles the Location class and builder
 
@@ -255,7 +257,7 @@ def new_game():
 
 
 # load and interpret a save
-def load_game():
+def load_game(): # TODO
     pass
 
 
@@ -306,6 +308,16 @@ def clear_terminal():
     flush_input() # flush the input buffer so dumb shit doesn't happen (this is becoming a really useful method)
 
 
+# display a popup with a specific message
+def display_popup(message, button_text): # from Python's "tkinter life preserver"
+    root = Tk()
+    frm = ttk.Frame(root, padding = 10)
+    frm.grid()
+    ttk.Label(frm, text = message).grid(column = 0, row = 0)
+    ttk.Button(frm, text = button_text, command = root.destroy).grid(column = 1, row = 0)
+    root.mainloop()
+
+
 def main_menu():
     while True:
         print("Welcome to Cave Adventure!")
@@ -318,6 +330,7 @@ def main_menu():
                 new_game()
             case "2" | "load game":
                 load_game() # TODO: implement save loading
+                display_popup("Saving and loading feature not yet implemented.", "aw darn")
             case "3" | "quit":
                 quit()
             case _:
