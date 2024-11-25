@@ -135,9 +135,11 @@ def display_inventory():
         
 
 
-# sort the inventory; called before any time the inventory is displayed
+# sort the inventory; called any time the inventory is changed
 def sort_inventory():
-    pass
+    global inventory
+    inventory.sort()
+    
 
 
 # find the minimum or maximum value item in the inventory
@@ -163,6 +165,7 @@ def pickup(loc, item_name): # TODO
             found = True
             loc.items.remove(item)
             inventory.append(item)
+            sort_inventory()
             print(f"You picked up a {item}!")
     if not found:
         print("There is no item within range with that name.")
