@@ -79,35 +79,9 @@ def game_menu(loc_name):
             return # putting this return here probably makes everything safer, idk; we're just getting deeper into this chain with each game_menu() call
 
 
-def display_help():
-    print("Available commands:")
-    print("CHECKVALUE")
-    print("Checks the value of an item in your inventory.")
-    print()
-    print("GOTO <location>")
-    print("- Goes to a location in range. (Use \"_\" instead of \" \" in location names)")
-    print()
-    print("HELP")
-    print("- Shows a list available commands.")
-    print()
-    print("INVENTORY")
-    print("- Displays your inventory.")
-    print()
-    print("INVENTORY MAX/MIN")
-    print("- Tells you the highest/lowest valued item in your inventory.")
-    print()
-    print("INVENTORY SUM")
-    print("- Sums the values of every item in your inventory.")
-    print()
-    print("LOOK")
-    print("- Looks at your surroundings.")
-    print()
-    print("PICKUP <item>")
-    print("Picks up an item in range.")
-
-
-def look(loc):
-    printg(loc.desc)
+# display the inventory and select an item to check the value of
+def check_value(): # TODO
+    pass
 
 
 def goto(loc, new_loc_name):
@@ -117,6 +91,57 @@ def goto(loc, new_loc_name):
             return True, new_loc_name
     print("Destination is invalid or you can't go there. Please use \"_\" instead of \" \" in destination name.")
     return False, loc.name
+
+
+def display_help():
+    print("Available commands:")
+    print("CHECKVALUE") # TODO
+    print("Checks the value of an item in your inventory.")
+    print()
+    print("GOTO <location>")
+    print("- Goes to a location in range. (Use \"_\" instead of \" \" in location names)")
+    print()
+    print("HELP")
+    print("- Shows a list available commands.")
+    print()
+    print("INVENTORY") # TODO
+    print("- Displays your inventory.")
+    print()
+    print("INVENTORY MAX/MIN") # TODO
+    print("- Tells you the highest/lowest valued item in your inventory.")
+    print()
+    print("INVENTORY SUM") # TODO
+    print("- Sums the values of every item in your inventory.")
+    print()
+    print("LOOK")
+    print("- Looks at your surroundings.")
+    print()
+    print("PICKUP <item>") # TODO
+    print("Picks up an item in range.")
+
+
+# display the inventory
+def display_inventory(): # TODO
+    pass
+
+
+# find the minimum or maximum value item in the inventory
+def min_max_inventory(minimum = False): # TODO
+    pass
+
+
+# sum the values of all items in the inventory
+sum_inventory(): # TODO
+    pass
+
+
+def look(loc):
+    printg(loc.desc)
+
+
+# pick up an item and add it to the inventory
+def pickup(loc, item): # TODO
+    pass
 
 
 # play the intro scene when a new game is started
